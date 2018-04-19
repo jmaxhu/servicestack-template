@@ -1,0 +1,35 @@
+image: microsoft/dotnet:2-sdk
+
+stages:
+  - test
+  - publish
+  - deploy
+
+test:
+  stage: test
+  services:
+    - name: mysql:5.7
+      alias: mysql
+      command: ["mysqld", "--character-set-server=utf8", "--collation-server=utf8_unicode_ci"]
+  variables:
+    MYSQL_DATABASE: myapp_db_test 
+    MYSQL_ROOT_PASSWORD: password
+  script: TEST_ENV=Test dotnet test MyApp.Tests/
+
+publish:
+  stage: publish
+  script: dotnet publish MyApp/MyApp.csproj -c Release -f netcoreapp2.0 -o ../publish
+  artifacts:
+    paths:
+      - publish
+    expire_in: 20min
+
+deploy:
+  stage: deploy
+  services:
+    - docker:stable-dind
+  image: docker:stable
+  script:
+    - ls publish
+    - rm -rf /root/myapp/publish
+    - cp -R publish /root/myapp/
