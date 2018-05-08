@@ -4,6 +4,10 @@
 
 # 安装
 
+## 安装 .net core sdk
+首先到 [.net core](https://www.microsoft.com/net/download/all) 页面下载最新的 2.1 版本的 sdk。
+
+## 下载项目
 该脚手架基于 servicestack cli，使用前请先安装 node 及 servicestack/cli 的 npm 包。
 
 ```shell
