@@ -10,17 +10,22 @@
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="2.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.2" />
-    <PackageReference Include="ServiceStack" Version="5.0.2" />
-    <PackageReference Include="ServiceStack.Api.Swagger" Version="5.0.2" />
-    <PackageReference Include="ServiceStack.OrmLite" Version="5.0.2" />
-    <PackageReference Include="ServiceStack.OrmLite.MySql" Version="5.0.2" />
-    <PackageReference Include="ServiceStack.Server" Version="5.0.2" />
-    <PackageReference Include="ServiceStack.Text" Version="5.0.102" />
+    <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.0-beta.50" />
+    <PackageReference Include="NLog" Version="4.5.4" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.2" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.5.4" />
+    <PackageReference Include="ServiceStack" Version="5.1.0" />
+    <PackageReference Include="ServiceStack.Api.Swagger" Version="5.1.0" />
+    <PackageReference Include="ServiceStack.OrmLite" Version="5.1.0" />
+    <PackageReference Include="ServiceStack.OrmLite.MySql" Version="5.1.0" />
+    <PackageReference Include="ServiceStack.Server" Version="5.1.0" />
+    <PackageReference Include="ServiceStack.Text" Version="5.1.100" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyApp.Manage\MyApp.Manage.csproj" />

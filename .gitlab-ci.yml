@@ -1,4 +1,4 @@
-image: microsoft/dotnet:2-sdk
+image: microsoft/dotnet:2.1-sdk-alpine
 
 stages:
   - test
@@ -18,7 +18,12 @@ test:
 
 publish:
   stage: publish
-  script: dotnet publish MyApp/MyApp.csproj -c Release -f netcoreapp2.0 -o ../publish
+  script:
+    - dotnet publish MyApp/MyApp.csproj -c Release -f netcoreapp2.0 -o ../publish/publish
+    - cp version ./publish
+    - cp Dockerfile ./publish
+    - rm -rf /root/MyApp/publish
+    - cp -R publish/publish /root/MyApp/publish
   artifacts:
     paths:
       - publish
@@ -26,10 +31,16 @@ publish:
 
 deploy:
   stage: deploy
+# 只在 release 分布执行 depoly 操作
+  only:
+    - release
   services:
+# --privileged 参数必须设置
     - docker:stable-dind
   image: docker:stable
   script:
-    - ls publish
-    - rm -rf /root/myapp/publish
-    - cp -R publish /root/myapp/
+    - cd publish
+# docker仓库，tag等信息根据实际项目调整。
+    - docker login -u $DOCKER_USER -p $DOCKER_PWD registry.cn-hangzhou.aliyuncs.com 
+    - docker build -t registry.cn-hangzhou.aliyuncs.com/jmax/my_app:v$(cat version) .
+    - docker push registry.cn-hangzhou.aliyuncs.com/jmax/my_app:v$(cat version)

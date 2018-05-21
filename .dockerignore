@@ -1,0 +1,6 @@
+.idea/
+.vscode/
+MyApp/
+MyApp.ServiceInterface/
+MyApp.ServiceModel/
+MyApp.Tests/

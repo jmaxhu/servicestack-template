@@ -24,6 +24,13 @@ dotnet-new https://github.com/jmaxhu/servicestack-template [project name]
 ASPNETCORE_ENVIRONMENT=Development dotnet watch run
 ```
 
+或者通过写好的脚本来执行。
+
+```shell
+cd MyApp
+./run.sh
+```
+
 # 测试
 
 ```shell
@@ -45,3 +52,15 @@ GRANT ALL ON [dbname].* TO 'user'@'%';
 
 FLUSH PRIVILEGES;
 ```
+
+# 关于发布
+
+这里的发布分为测试发布和生产发布。发布工具使用 gitlab ci。
+
+## 测试发布
+
+每次代码提交（master分支）时，gitlab ci 都会自动编译系统，并把结果复制到指定目录，该目录通过 docker 的路径映射功能从 gitlab runner 环境复制到 host 环境。把对应的文件覆盖即可。
+
+## 生产发布
+
+当 realese 分支有提交时，gitlab ci 会执行生产发布的脚本。发布使用 docker build 来创建镜像，再通过 docker push 推送到指定的仓库中。对于私有仓库需要登录，所以要先通过 docker login 登录，注意登录使用的用户名和密码，通过 gitlab ci 提供的 secript veriables 功能来保护和存储，避免把账号信息写在脚本里。**注意：受保护的变量使用时需要把分支设置成保护分支才会传递。**
