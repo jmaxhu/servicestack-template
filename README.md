@@ -34,7 +34,7 @@ cd MyApp
 # 测试
 
 ```shell
-dotnet test MyApp.Test/
+dotnet test -v=m MyApp.Test/
 ```
 
 # 数据库

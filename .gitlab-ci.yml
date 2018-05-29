@@ -14,7 +14,7 @@ test:
   variables:
     MYSQL_DATABASE: myapp_db_test 
     MYSQL_ROOT_PASSWORD: password
-  script: TEST_ENV=Test dotnet test MyApp.Tests/
+  script: TEST_ENV=Test dotnet test -v=m MyApp.Tests/
 
 publish:
   stage: publish

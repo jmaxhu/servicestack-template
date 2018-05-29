@@ -1,4 +1,6 @@
-ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS="http://*:5002" dotnet watch run
+#!/usr/bin/env bash
+
+ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS="http://*:5003" dotnet watch run
 
 # Unix:
 # ASPNETCORE_URLS="https://*:5123" dotnet run

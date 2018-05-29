@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using DayuCloud.Manage;
+using DayuCloud.Service;
 using MyApp.Manage;
 using MyApp.ServiceInterface;
 using MyApp.ServiceModel.Models;
@@ -18,7 +20,7 @@ namespace MyApp
 {
     public class AppHost : AppHostBase
     {
-        public AppHost() : base("Data Center", typeof(FileService).Assembly)
+        public AppHost() : base("MyApp", typeof(FileService).Assembly, typeof(AccountService).Assembly)
         {
         }
 
@@ -93,6 +95,7 @@ namespace MyApp
             container.Register<ICacheClient>(new MemoryCacheClient());
             container.Register<IAuthRepository>(c => new OrmLiteAuthRepository<UserEntity, UserAuthDetails>(dbFactory));
 
+            container.RegisterAs<RemoteAccountManage, IAccountManage>();
             container.RegisterAs<UserManage, IUserManage>();
             container.RegisterAs<OrgManage, IOrgManage>();
             container.RegisterAs<MysqlSchemaManage, ISchemaManage>();
