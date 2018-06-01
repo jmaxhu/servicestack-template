@@ -32,6 +32,7 @@ publish:
     - cp version ./publish
     - cp Dockerfile ./publish
     - rm -rf /root/MyApp/publish
+    - mkdir -p /root/MyApp/publish
     - cp -R publish/publish /root/MyApp/publish
     # - echo "$SSH_PRIVATE_KEY" | ssh-add -
     # - ssh -p22 root@112.124.3.134 "docker restart my_app"
