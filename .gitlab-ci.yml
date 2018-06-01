@@ -1,5 +1,12 @@
 image: microsoft/dotnet:2.1-sdk-alpine
 
+before_script:
+  - echo "http://mirrors.aliyun.com/alpine/v3.7/main/" > /etc/apk/repositories
+  - 'which ssh-agent || ( apk update && apk add --no-cache openssh )'
+  - mkdir -p ~/.ssh
+  - eval $(ssh-agent -s)
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
 stages:
   - test
   - publish
@@ -19,11 +26,13 @@ test:
 publish:
   stage: publish
   script:
-    - dotnet publish MyApp/MyApp.csproj -c Release -f netcoreapp2.0 -o ../publish/publish
+    - dotnet publish MyApp/MyApp.csproj -c Release -f netcoreapp2.1 -o ../publish/publish
     - cp version ./publish
     - cp Dockerfile ./publish
     - rm -rf /root/MyApp/publish
     - cp -R publish/publish /root/MyApp/publish
+    # - echo "$SSH_PRIVATE_KEY" | ssh-add -
+    # - ssh -p22 root@112.124.3.134 "docker restart my_app"
   artifacts:
     paths:
       - publish
