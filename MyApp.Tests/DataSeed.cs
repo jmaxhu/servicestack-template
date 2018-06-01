@@ -20,13 +20,13 @@ namespace MyApp.Tests
         /// <summary>
         /// 测试数据库名
         /// </summary>
-        public const string TestDatabaseName = "dayu_datacenter_test";
+        public const string TestDatabaseName = "myapp_db_test";
 
         /// <summary>
         /// 测试数据库连接字符串
         /// </summary>
         public static string TestDbConnection => ServiceStackHost.Instance.AppSettings.GetString("TEST_ENV") == "Test"
-            ? $"Server=mysql;Database={TestDatabaseName};Uid=root;Pwd=dcenter_123@qwe;SslMode=None;CharSet=utf8;"
+            ? $"Server=mysql;Database={TestDatabaseName};Uid=dcenter;Pwd=dcenter_123@qwe;SslMode=None;CharSet=utf8;"
             : $"Server=127.0.0.1;Port=13306;Database={TestDatabaseName};Uid=dcenter;Pwd=dcenter_123@qwe;SslMode=None;CharSet=utf8;";
 
         /// <summary>
