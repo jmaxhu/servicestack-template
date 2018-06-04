@@ -1,4 +1,4 @@
-﻿using MyApp.ServiceModel.Common;
+﻿using DayuCloud.Model.Common;
 using ServiceStack;
 
 namespace MyApp.ServiceModel.User

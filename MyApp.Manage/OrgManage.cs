@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using DayuCloud.Model.Common;
 using MyApp.ServiceModel.Common;
 using MyApp.ServiceModel.Org;
 using ServiceStack.OrmLite;
@@ -78,7 +79,7 @@ namespace MyApp.Manage
                 builder.OrderBy(x => x.ParentId).ThenBy(x => x.Id);
 
                 var total = await db.CountAsync(builder);
-                builder.Limit(query.Offset, query.PageSize);
+                builder.Limit(query.Skip, query.PageSize);
                 var results = await db.SelectAsync(builder);
                 var orgs = await SetOrganizationInfo(db, results);
 

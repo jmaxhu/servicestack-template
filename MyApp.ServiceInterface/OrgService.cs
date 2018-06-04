@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using DayuCloud.Model.Common;
 using MyApp.Manage;
-using MyApp.ServiceModel.Common;
 using MyApp.ServiceModel.Org;
 using ServiceStack;
 

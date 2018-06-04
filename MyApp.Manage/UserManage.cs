@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using DayuCloud.Model.Common;
 using MyApp.ServiceModel.Common;
 using MyApp.ServiceModel.Models;
 using MyApp.ServiceModel.Org;
@@ -51,7 +52,7 @@ namespace MyApp.Manage
                 builder.OrderBy(x => x.Id);
                 var count = await db.CountAsync(builder);
 
-                builder.Limit(queryDto.Offset, queryDto.PageSize);
+                builder.Limit(queryDto.Skip, queryDto.PageSize);
                 var users = await db.SelectAsync(builder);
 
                 // 准备数据

@@ -1,10 +1,9 @@
-﻿using MyApp.ServiceModel.Common;
-using MyApp.ServiceModel.Models;
+﻿using DayuCloud.Model.Common;
 using ServiceStack;
+using IDto = MyApp.ServiceModel.Models.IDto;
 
 namespace MyApp.ServiceModel.Org
 {
-    /// <inheritdoc />
     /// <summary>
     /// 组织搜索条件
     /// </summary>
