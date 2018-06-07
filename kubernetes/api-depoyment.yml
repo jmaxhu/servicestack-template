@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: MyApp-api
+  labels:
+    app: MyApp
+spec:
+  ports:
+    - port: 8081
+      targetPort: 80
+  selector:
+    app: MyApp
+    tier: backend
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: MyApp-api
+  labels:
+    app: MyApp
+spec:
+  selector:
+    matchLabels:
+      app: MyApp
+      tier: backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: MyApp
+        tier: backend
+    spec:
+      containers:
+      - image: registry.cn-hangzhou.aliyuncs.com/jmaxhu/MyApp_api:v0.1.0
+        name: MyApp-api
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Kubernetes"
+        - name: RedisHost
+          value: MyApp-redis
+        - name: RedisPort
+          value: "6379"
+        - name: DBHost
+          value: MyApp-mysql
+        - name: DBPort
+          value: "3306"
+        - name: DBUser
+          value: "root"
+        - name: DBPassword
+          valueFrom:
+            secretKeyRef:
+              name: MyApp-mysql-pass
+              key: password
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: MyApp-docker-regcred

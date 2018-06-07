@@ -24,6 +24,7 @@
     <PackageReference Include="ServiceStack.Api.Swagger" Version="5.1.0" />
     <PackageReference Include="ServiceStack.OrmLite" Version="5.1.0" />
     <PackageReference Include="ServiceStack.OrmLite.MySql" Version="5.1.0" />
+    <PackageReference Include="ServiceStack.Redis" Version="5.1.0" />
     <PackageReference Include="ServiceStack.Server" Version="5.1.0" />
     <PackageReference Include="ServiceStack.Text" Version="5.1.100" />
   </ItemGroup>

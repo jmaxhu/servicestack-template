@@ -10,3 +10,4 @@ ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS="http://*:5000" dotnet watch 
 
 # Windows CMD (note: no quotes):
 # SET ASPNETCORE_URLS=https://*:5123 && dotnet run
+

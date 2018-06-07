@@ -19,10 +19,10 @@ test:
       alias: mysql
       command: ["mysqld", "--character-set-server=utf8", "--collation-server=utf8_unicode_ci"]
   variables:
-    MYSQL_DATABASE: myapp_db_test 
-    MYSQL_USER: dcenter
-    MYSQL_PASSWORD: dcenter_123@qwe
-    MYSQL_ROOT_PASSWORD: dcenter_123@qwe
+    MYSQL_DATABASE: MyApp_db_test 
+    MYSQL_USER: MyApp_admin
+    MYSQL_PASSWORD: MyApp_admin_123@qwe
+    MYSQL_ROOT_PASSWORD: MyApp_admin_123@qwe
   script: TEST_ENV=Test dotnet test -v=m MyApp.Tests/
 
 publish:
@@ -35,7 +35,7 @@ publish:
     - mkdir -p /root/MyApp/publish
     - cp -a publish/publish/* /root/MyApp/publish
     # - echo "$SSH_PRIVATE_KEY" | ssh-add -
-    # - ssh -p22 root@112.124.3.134 "docker restart my_app"
+    # - ssh -p22 root@112.124.3.134 "docker restart MyApp"
   artifacts:
     paths:
       - publish

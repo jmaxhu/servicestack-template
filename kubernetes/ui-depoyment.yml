@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: MyApp-ui
+  labels:
+    app: MyApp
+spec:
+  ports:
+    - port: 8080
+      targetPort: 80
+  selector:
+    app: MyApp
+    tier: backend
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: MyApp-ui
+  labels:
+    app: MyApp
+spec:
+  selector:
+    matchLabels:
+      app: MyApp
+      tier: backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: MyApp
+        tier: backend
+    spec:
+      containers:
+      - image: registry.cn-hangzhou.aliyuncs.com/jmaxhu/MyApp_ui:v0.1.2
+        name: MyApp-ui
+        env:
+        - name: API_ROOT
+          value: "http://localhost:8081"
+       ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: MyApp-docker-regcred

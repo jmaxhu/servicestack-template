@@ -1,0 +1,43 @@
+version: '2'
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: MyApp-mysql
+    volumes:
+      - /root/MyApp/db:/var/lib/mysql
+    command: ["mysqld", "--character-set-server=utf8", "--collation-server=utf8_unicode_ci"]
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: MyApp_admin_123@qwe 
+      MYSQL_DATABASE: MyApp_db
+      MYSQL_USER: MyApp_admin
+      MYSQL_PASSWORD: MyApp_admin_123@123
+  redis:
+    image: redis:4-alpine
+    container_name: MyApp-redis
+    volumes:
+      - /root/MyApp/redis-data:/data
+    restart: always
+  MyApp_api:
+    links:
+      - mysql
+      - redis
+    image: microsoft/dotnet:2.1-aspnetcore-runtime-alpine
+    container_name: MyApp-api
+    working_dir: /root/MyApp/MyApp
+    command: ["dotnet", "/root/MyApp/MyApp/MyApp.dll"]
+    ports:
+      - "8501:80"
+    restart: always
+    volumes:
+      - /root/MyApp/MyApp:/root/MyApp/MyApp
+      - /tmp:/tmp
+  MyApp_ui:
+    image: nginx:1.11-alpine
+    container_name: MyApp-ui
+    ports:
+      - "8500:80"
+    restart: always
+    volumes:
+      - /root/MyApp/MyAppUI:/usr/share/nginx/html:ro
+ 

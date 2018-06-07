@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Text.RegularExpressions;
 using DayuCloud.Manage;
 using DayuCloud.Service;
@@ -15,6 +16,9 @@ using ServiceStack.Auth;
 using ServiceStack.Caching;
 using ServiceStack.Data;
 using ServiceStack.OrmLite;
+using ServiceStack.Redis;
+using StackExchange.Profiling;
+using StackExchange.Profiling.Data;
 
 namespace MyApp
 {
@@ -79,10 +83,23 @@ namespace MyApp
                 }
             });
 
-            var dbFactory = new OrmLiteConnectionFactory(
-                AppSettings.GetString("ConnectionString"),
-                MySqlDialect.Provider
-            );
+            // redis init
+            var redisConnStr = $"redis://{AppSettings.Get<string>("RedisHost")}:{AppSettings.Get<string>("RedisPort")}";
+            var redisManager = new RedisManagerPool(redisConnStr);
+            container.Register<IRedisClientsManager>(c => redisManager);
+            container.Register(c => redisManager.GetCacheClient());
+
+            var dbHost = AppSettings.Get<string>("DBHost");
+            var dbPort = AppSettings.Get<string>("DBPort");
+            var dbUser = AppSettings.Get<string>("DBUser");
+            var dbPassword = AppSettings.Get<string>("DBPassword");
+            var dbParam = AppSettings.Get<string>("DBParam");
+            var dbConnStr = $"Server={dbHost};Port={dbPort};Uid={dbUser};Pwd={dbPassword};{dbParam}";
+            var dbFactory = new OrmLiteConnectionFactory(dbConnStr, MySqlDialect.Provider)
+            {
+                AutoDisposeConnection = true,
+                ConnectionFilter = db => new ProfiledDbConnection((DbConnection) db, MiniProfiler.Current)
+            };
 
             ErrorMessages.InvalidUsernameOrPassword = "无效的用户名或密码";
             ErrorMessages.IllegalUsername = "无效的用户名";
