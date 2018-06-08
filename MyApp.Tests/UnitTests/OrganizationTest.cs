@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using MyApp.ServiceModel.Common;
+using DayuCloud.Common;
 using MyApp.ServiceModel.Org;
 using NUnit.Framework;
 using ServiceStack.OrmLite;

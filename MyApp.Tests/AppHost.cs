@@ -1,4 +1,5 @@
-﻿using MyApp.Manage;
+﻿using DayuCloud.Manage;
+using MyApp.Manage;
 using MyApp.ServiceInterface;
 using MyApp.ServiceModel.User;
 using Funq;
@@ -29,13 +30,11 @@ namespace MyApp.Tests
             container.Register<IDbConnectionFactory>(c => dbFactory);
             container.Register<ICacheClient>(new MemoryCacheClient());
             container.Register<IAuthRepository>(c => new OrmLiteAuthRepository<UserEntity, UserAuthDetails>(dbFactory));
-            
+
             container.RegisterAs<UserManage, IUserManage>();
             container.RegisterAs<OrgManage, IOrgManage>();
-            container.RegisterAs<MysqlSchemaManage, ISchemaManage>();
             container.RegisterAs<ReflectionManage, IReflectionManage>();
+            container.Register<ISchemaManage>(c => new MysqlSchemaManage("MyApp_test_db"));
         }
-
-       
     }
 }

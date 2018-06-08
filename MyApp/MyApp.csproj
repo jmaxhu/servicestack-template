@@ -5,7 +5,7 @@
     <PackageId>MyApp</PackageId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DayuCloud" Version="1.0.3" />
+    <PackageReference Include="DayuCloud" Version="1.0.4" />
     <PackageReference Include="DayuCloud.Account" Version="1.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.1.0" />

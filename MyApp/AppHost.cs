@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Text.RegularExpressions;
 using DayuCloud.Account.Manage;
 using DayuCloud.Account.Service;
+using DayuCloud.Manage;
 using MyApp.Manage;
 using MyApp.ServiceInterface;
 using MyApp.ServiceModel.Models;
@@ -116,8 +117,8 @@ namespace MyApp
             container.RegisterAs<RemoteSSOManager, ISSOManage>();
             container.RegisterAs<UserManage, IUserManage>();
             container.RegisterAs<OrgManage, IOrgManage>();
-            container.RegisterAs<MysqlSchemaManage, ISchemaManage>();
             container.RegisterAs<ReflectionManage, IReflectionManage>();
+            container.Register<ISchemaManage>(c => new MysqlSchemaManage("MyApp_db"));
 
             InitData(container);
         }

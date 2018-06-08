@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using DayuCloud.Manage;
 using MyApp.Manage;
 using MyApp.ServiceInterface;
 using MyApp.ServiceModel.User;
@@ -44,14 +45,15 @@ namespace MyApp.Tests
 
                     container.Register<IDbConnectionFactory>(c => dbFactory);
                     container.Register<ICacheClient>(new MemoryCacheClient());
-                    container.Register<IAuthRepository>(c => new OrmLiteAuthRepository<UserEntity, UserAuthDetails>(dbFactory)
-                    {
-                        UseDistinctRoleTables = true
-                    });
+                    container.Register<IAuthRepository>(c =>
+                        new OrmLiteAuthRepository<UserEntity, UserAuthDetails>(dbFactory)
+                        {
+                            UseDistinctRoleTables = true
+                        });
 
                     container.RegisterAs<UserManage, IUserManage>();
                     container.RegisterAs<OrgManage, IOrgManage>();
-                    container.RegisterAs<MysqlSchemaManage, ISchemaManage>();
+                    container.Register<ISchemaManage>(c => new MysqlSchemaManage("MyApp_test_db"));
                 }
             };
 

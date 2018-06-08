@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using DayuCloud.Common;
 using MyApp.ServiceModel;
 using MyApp.ServiceModel.Common;
 using MyApp.ServiceModel.Models;

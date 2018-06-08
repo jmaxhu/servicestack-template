@@ -1,6 +1,5 @@
 ﻿using DayuCloud.Model.Common;
 using ServiceStack;
-using IDto = MyApp.ServiceModel.Models.IDto;
 
 namespace MyApp.ServiceModel.Org
 {

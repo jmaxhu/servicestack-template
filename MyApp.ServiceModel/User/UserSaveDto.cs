@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using DayuCloud.Model.Common;
 using MyApp.ServiceModel.Models;
 
 namespace MyApp.ServiceModel.User
