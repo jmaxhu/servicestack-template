@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Text.RegularExpressions;
-using DayuCloud.Manage;
-using DayuCloud.Service;
+using DayuCloud.Account.Manage;
+using DayuCloud.Account.Service;
 using MyApp.Manage;
 using MyApp.ServiceInterface;
 using MyApp.ServiceModel.Models;

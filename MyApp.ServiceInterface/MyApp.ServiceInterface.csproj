@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DayuCloud" Version="1.0.2" />
+    <PackageReference Include="DayuCloud" Version="1.0.3" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.0" />
     <PackageReference Include="ServiceStack" Version="5.1.0" />
   </ItemGroup>
