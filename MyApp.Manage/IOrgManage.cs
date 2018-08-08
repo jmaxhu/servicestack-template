@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using DayuCloud.Model.Common;
+using DayuCloud.Common;
 using MyApp.ServiceModel.Org;
 
 namespace MyApp.Manage

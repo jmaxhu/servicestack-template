@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using DayuCloud.Common;
 using DayuCloud.Manage;
-using DayuCloud.Model.Common;
 using MyApp.ServiceModel.Models;
 using MyApp.ServiceModel.Org;
 using MyApp.ServiceModel.User;

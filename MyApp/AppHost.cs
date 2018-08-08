@@ -114,7 +114,6 @@ namespace MyApp
             container.Register<IAuthRepository>(c => new OrmLiteAuthRepository<UserEntity, UserAuthDetails>(dbFactory));
 
             container.RegisterAs<RemoteAccountManage, IAccountManage>();
-            container.RegisterAs<RemoteSSOManager, ISSOManage>();
             container.RegisterAs<UserManage, IUserManage>();
             container.RegisterAs<OrgManage, IOrgManage>();
             container.RegisterAs<ReflectionManage, IReflectionManage>();

@@ -1,4 +1,4 @@
-﻿using DayuCloud.Model.Common;
+﻿using DayuCloud.Common;
 using ServiceStack.DataAnnotations;
 
 namespace MyApp.ServiceModel.Org

@@ -1,5 +1,5 @@
 ﻿using System;
-using DayuCloud.Model.Common;
+using DayuCloud.Common;
 using MyApp.ServiceModel.Models;
 using MyApp.ServiceModel.Org;
 

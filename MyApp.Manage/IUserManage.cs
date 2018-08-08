@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using DayuCloud.Model.Common;
+using DayuCloud.Common;
 using MyApp.ServiceModel.User;
 
 namespace MyApp.Manage
