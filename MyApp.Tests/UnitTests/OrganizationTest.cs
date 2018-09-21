@@ -13,12 +13,12 @@ namespace MyApp.Tests.UnitTests
         [Test]
         public async Task Can_Save_Organization()
         {
-            var org = new OrganizationEntity {ParentId = 0, Name = "水利厅"};
+            var org = new Organization {ParentId = 0, Name = "水利厅"};
             var orgId = await OrgManage.SaveOrganization(org);
 
             Assert.True(org.Id > 0);
 
-            var dbOrg = await Db.SingleByIdAsync<OrganizationEntity>(orgId);
+            var dbOrg = await Db.SingleByIdAsync<Organization>(orgId);
 
             Assert.AreEqual(orgId, dbOrg.Id);
             Assert.AreEqual(org.Name, dbOrg.Name);
@@ -28,8 +28,8 @@ namespace MyApp.Tests.UnitTests
         [Test]
         public async Task Can_Read_ParentName()
         {
-            var oneChild = await Db.SingleAsync<OrganizationEntity>(x => x.ParentId > 0);
-            var parentOrg = await Db.SingleByIdAsync<OrganizationEntity>(oneChild.ParentId);
+            var oneChild = await Db.SingleAsync<Organization>(x => x.ParentId > 0);
+            var parentOrg = await Db.SingleByIdAsync<Organization>(oneChild.ParentId);
 
             var org = await OrgManage.GetOrganizationById(oneChild.Id);
 
@@ -41,7 +41,7 @@ namespace MyApp.Tests.UnitTests
         [Test]
         public async Task Query_Root_Org_Test()
         {
-            var rootOrgs = await Db.SelectAsync<OrganizationEntity>(x => x.ParentId == 0);
+            var rootOrgs = await Db.SelectAsync<Organization>(x => x.ParentId == 0);
 
             var orgs = await OrgManage.GetRootOrganizations();
 
@@ -60,16 +60,16 @@ namespace MyApp.Tests.UnitTests
         public async Task Can_Query_Organization()
         {
             var parentId = await Db.ScalarAsync<long>(
-                Db.From<OrganizationEntity>().Where(x => x.ParentId == 0).Select(x => Sql.Max(x.Id)));
+                Db.From<Organization>().Where(x => x.ParentId == 0).Select(x => Sql.Max(x.Id)));
 
-            var childCount = await Db.CountAsync<OrganizationEntity>(x => x.ParentId == parentId);
+            var childCount = await Db.CountAsync<Organization>(x => x.ParentId == parentId);
 
             var queryResults = await OrgManage.GetOrganizations(
                 new OrgQuery {PageIndex = 1, PageSize = 10, ParentId = parentId});
 
             Assert.AreEqual(queryResults.Total, childCount);
 
-            var searchCount = await Db.CountAsync<OrganizationEntity>(x => x.Name.Contains("组织3"));
+            var searchCount = await Db.CountAsync<Organization>(x => x.Name.Contains("组织3"));
 
             queryResults = await OrgManage.GetOrganizations(
                 new OrgQuery {PageIndex = 1, PageSize = 10, SearchName = "组织3"});
@@ -80,14 +80,14 @@ namespace MyApp.Tests.UnitTests
         [Test]
         public async Task Can_Delete_Organization()
         {
-            var org = new OrganizationEntity {ParentId = 0, Name = "待删除"};
+            var org = new Organization {ParentId = 0, Name = "待删除"};
             var orgId = await Db.InsertAsync(org, true);
 
             Assert.IsTrue(orgId > 0);
 
             await OrgManage.DeleteOrganization(orgId);
 
-            var exist = await Db.ExistsAsync<OrganizationEntity>(x => x.Id == orgId);
+            var exist = await Db.ExistsAsync<Organization>(x => x.Id == orgId);
 
             Assert.IsFalse(exist);
         }
@@ -95,7 +95,7 @@ namespace MyApp.Tests.UnitTests
         [Test]
         public async Task Can_Update_Organization()
         {
-            var org = new OrganizationEntity {ParentId = 0, Name = "变更前"};
+            var org = new Organization {ParentId = 0, Name = "变更前"};
             var orgId = await Db.InsertAsync(org, true);
 
             org.Id = orgId;
@@ -103,12 +103,12 @@ namespace MyApp.Tests.UnitTests
 
             await OrgManage.SaveOrganization(org);
 
-            var newOrg = await Db.SingleByIdAsync<OrganizationEntity>(orgId);
+            var newOrg = await Db.SingleByIdAsync<Organization>(orgId);
             Assert.AreEqual(newOrg.Name, "变更后");
 
             //同组织下名称不能重复
-            var oneChild = new OrganizationEntity {ParentId = orgId, Name = "子组织1"};
-            var wrongChild = new OrganizationEntity {ParentId = orgId, Name = "子组织1"};
+            var oneChild = new Organization {ParentId = orgId, Name = "子组织1"};
+            var wrongChild = new Organization {ParentId = orgId, Name = "子组织1"};
             await Db.InsertAsync(oneChild);
 
             Assert.ThrowsAsync<UserFriendlyException>(async () =>

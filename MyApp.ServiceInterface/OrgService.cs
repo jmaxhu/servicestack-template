@@ -10,14 +10,14 @@ namespace MyApp.ServiceInterface
     {
         public IOrgManage OrgManage{ get; set; }
 
-        public async Task<PagedResult<OrganizationEntity>> Get(GetOrgs request)
+        public async Task<PagedResult<Organization>> Get(GetOrgs request)
         {
             return await OrgManage.GetOrganizations(request);
         }
 
         public async Task<long> Post(SaveOrg request)
         {
-            var org = request.ConvertTo<OrganizationEntity>();
+            var org = request.ConvertTo<Organization>();
 
             return await OrgManage.SaveOrganization(org);
         }

@@ -6,7 +6,7 @@ using DayuCloud.Common;
 using DayuCloud.Manage;
 using DayuCloud.Models;
 using MyApp.ServiceModel;
-using MyApp.ServiceModel.User;
+using MyApp.ServiceModel.Account;
 using ServiceStack;
 using ServiceStack.OrmLite;
 
@@ -106,7 +106,7 @@ namespace MyApp.ServiceInterface
             }
 
             var userId = long.Parse(GetSession().UserAuthId);
-            var user = await Db.SingleByIdAsync<UserEntity>(userId);
+            var user = await Db.SingleByIdAsync<UserInfo>(userId);
             if (user == null)
             {
                 throw new UserFriendlyException("用户不存在。");
@@ -241,7 +241,7 @@ namespace MyApp.ServiceInterface
             }
 
             var userId = long.Parse(GetSession().UserAuthId);
-            var user = await Db.SingleByIdAsync<UserEntity>(userId);
+            var user = await Db.SingleByIdAsync<UserInfo>(userId);
 
             if (user == null)
             {

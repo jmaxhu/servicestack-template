@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DayuCloud.Manage;
 using MyApp.Manage;
-using MyApp.ServiceModel.Models;
+using MyApp.ServiceModel.Account;
+using MyApp.ServiceModel.Common;
 using MyApp.ServiceModel.Org;
-using MyApp.ServiceModel.User;
 using ServiceStack;
 using ServiceStack.Auth;
 using ServiceStack.Data;
@@ -40,11 +40,11 @@ namespace MyApp.Tests
 
             using (var db = dbFactory.OpenDbConnection())
             {
-                db.DropTable<OrganizationEntity>();
+                db.DropTable<Organization>();
 
                 db.DropTable<UserAuthRole>();
                 db.DropTable<UserAuthDetails>();
-                db.DropTable<UserEntity>();
+                db.DropTable<UserInfo>();
 
                 //删除其它表
                 Task.Run(async () =>
@@ -56,10 +56,10 @@ namespace MyApp.Tests
                     }
                 }).Wait();
 
-                ((OrmLiteAuthRepository<UserEntity, UserAuthDetails>) appHost.Resolve<IAuthRepository>())
+                ((OrmLiteAuthRepository<UserInfo, UserAuthDetails>) appHost.Resolve<IAuthRepository>())
                     .InitSchema();
 
-                db.CreateTable<OrganizationEntity>();
+                db.CreateTable<Organization>();
             }
         }
 
@@ -69,7 +69,7 @@ namespace MyApp.Tests
         public static void Create(ServiceStackHost appHost)
         {
             var dbFactory = appHost.Resolve<IDbConnectionFactory>();
-            var authRepo = (OrmLiteAuthRepository<UserEntity, UserAuthDetails>) appHost.Resolve<IAuthRepository>();
+            var authRepo = (OrmLiteAuthRepository<UserInfo, UserAuthDetails>) appHost.Resolve<IAuthRepository>();
             var schemaManage = appHost.Resolve<ISchemaManage>();
 
             var rand = new Random(DateTime.Now.Millisecond);
@@ -83,11 +83,11 @@ namespace MyApp.Tests
                     // 生成组织
                     for (var i = 0; i < parentOrgCount; i++)
                     {
-                        var id = db.Insert(new OrganizationEntity {ParentId = 0, Name = $"父组织_{i}"}, true);
+                        var id = db.Insert(new Organization {ParentId = 0, Name = $"父组织_{i}"}, true);
                         var childOrgCount = rand.Next(5, 20);
                         for (var j = 0; j < childOrgCount; j++)
                         {
-                            var childId = db.Insert(new OrganizationEntity {ParentId = id, Name = $"子组织_{i}"}, true);
+                            var childId = db.Insert(new Organization {ParentId = id, Name = $"子组织_{i}"}, true);
                             childOrgIds.Add(childId);
                         }
                     }
@@ -96,7 +96,7 @@ namespace MyApp.Tests
                     var userCount = rand.Next(10, 50);
                     for (var i = 0; i < userCount; i++)
                     {
-                        var user = new UserEntity
+                        var user = new UserInfo
                         {
                             UserName = $"username_{i}",
                             Email = $"username_{i}@dayu.com",

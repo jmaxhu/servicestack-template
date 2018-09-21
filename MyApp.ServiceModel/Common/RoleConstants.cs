@@ -1,4 +1,4 @@
-﻿namespace MyApp.ServiceModel.Models
+﻿namespace MyApp.ServiceModel.Common
 {
     /// <summary>
     /// 角色常量

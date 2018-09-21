@@ -4,7 +4,7 @@ namespace MyApp.ServiceModel.Org
 {
     [Route("/org", Verbs = "GET", Notes = "分页取组织列表, 必须提供第几页及每页记录数参数.", Summary = "取组织列表")]
     [Api("组织管理api")]
-    public class GetOrgs : OrgQuery, IReturn<OrganizationEntity>
+    public class GetOrgs : OrgQuery, IReturn<Organization>
     {
     }
 

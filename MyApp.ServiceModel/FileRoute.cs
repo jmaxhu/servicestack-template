@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MyApp.ServiceModel.Models;
+using MyApp.ServiceModel.Common;
 using ServiceStack;
 
 namespace MyApp.ServiceModel

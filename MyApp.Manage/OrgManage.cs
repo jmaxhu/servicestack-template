@@ -11,16 +11,16 @@ namespace MyApp.Manage
 {
     public class OrgManage : ManageBase, IOrgManage
     {
-        public async Task<List<OrganizationEntity>> GetRootOrganizations()
+        public async Task<List<Organization>> GetRootOrganizations()
         {
             using (var db = DbFactory.Open())
             {
-                return await db.SelectAsync<OrganizationEntity>(x => x.ParentId == 0);
+                return await db.SelectAsync<Organization>(x => x.ParentId == 0);
             }
         }
 
-        private static async Task<List<OrganizationEntity>> SetOrganizationInfo(IDbConnection db,
-            List<OrganizationEntity> orgs)
+        private static async Task<List<Organization>> SetOrganizationInfo(IDbConnection db,
+            List<Organization> orgs)
         {
             if (orgs == null || orgs.Count == 0)
             {
@@ -33,7 +33,7 @@ namespace MyApp.Manage
                 return null;
             }
 
-            var parentOrgs = await db.SelectAsync<OrganizationEntity>(x => Sql.In(x.Id, parentIds));
+            var parentOrgs = await db.SelectAsync<Organization>(x => Sql.In(x.Id, parentIds));
             orgs.ForEach(org =>
             {
                 var parent = parentOrgs.FirstOrDefault(x => x.Id == org.ParentId);
@@ -45,27 +45,27 @@ namespace MyApp.Manage
             return orgs;
         }
 
-        public async Task<OrganizationEntity> GetOrganizationById(long id)
+        public async Task<Organization> GetOrganizationById(long id)
         {
             using (var db = DbFactory.Open())
             {
-                var org = await db.SingleByIdAsync<OrganizationEntity>(id);
+                var org = await db.SingleByIdAsync<Organization>(id);
                 if (org == null)
                 {
                     return null;
                 }
 
-                var orgs = await SetOrganizationInfo(db, new List<OrganizationEntity> {org});
+                var orgs = await SetOrganizationInfo(db, new List<Organization> {org});
 
                 return orgs?[0];
             }
         }
 
-        public async Task<PagedResult<OrganizationEntity>> GetOrganizations(OrgQuery query)
+        public async Task<PagedResult<Organization>> GetOrganizations(OrgQuery query)
         {
             using (var db = DbFactory.Open())
             {
-                var builder = db.From<OrganizationEntity>();
+                var builder = db.From<Organization>();
                 if (query.ParentId.HasValue && query.ParentId >= 0)
                 {
                     builder.Where(x => x.ParentId == query.ParentId);
@@ -83,42 +83,42 @@ namespace MyApp.Manage
                 var results = await db.SelectAsync(builder);
                 var orgs = await SetOrganizationInfo(db, results);
 
-                return new PagedResult<OrganizationEntity> {Total = total, Results = orgs};
+                return new PagedResult<Organization> {Total = total, Results = orgs};
             }
         }
 
-        public async Task<long> SaveOrganization(OrganizationEntity organizationEntity)
+        public async Task<long> SaveOrganization(Organization organization)
         {
             using (var db = DbFactory.Open())
             {
                 // 同一级下的组织名称不能重复
-                if (organizationEntity.Id > 0)
+                if (organization.Id > 0)
                 {
                 }
 
-                var invalid = organizationEntity.Id > 0
-                    ? await db.ExistsAsync<OrganizationEntity>(x => x.ParentId == organizationEntity.ParentId &&
-                                                                    x.Name == organizationEntity.Name &&
-                                                                    x.Id != organizationEntity.Id)
-                    : await db.ExistsAsync<OrganizationEntity>(x => x.ParentId == organizationEntity.ParentId &&
-                                                                    x.Name == organizationEntity.Name);
+                var invalid = organization.Id > 0
+                    ? await db.ExistsAsync<Organization>(x => x.ParentId == organization.ParentId &&
+                                                                    x.Name == organization.Name &&
+                                                                    x.Id != organization.Id)
+                    : await db.ExistsAsync<Organization>(x => x.ParentId == organization.ParentId &&
+                                                                    x.Name == organization.Name);
                 if (invalid)
                 {
                     throw new UserFriendlyException("同一级组织下名称不能重复。");
                 }
 
-                if (organizationEntity.Id > 0)
+                if (organization.Id > 0)
                 {
                     // 只能更新父组织id和名称
-                    await db.UpdateOnlyAsync(organizationEntity, onlyFields: x => new {x.ParentId, x.Name},
-                        where: x => x.Id == organizationEntity.Id);
+                    await db.UpdateOnlyAsync(organization, onlyFields: x => new {x.ParentId, x.Name},
+                        where: x => x.Id == organization.Id);
                 }
                 else
                 {
-                    organizationEntity.Id = await db.InsertAsync(organizationEntity, true);
+                    organization.Id = await db.InsertAsync(organization, true);
                 }
 
-                return organizationEntity.Id;
+                return organization.Id;
             }
         }
 
@@ -126,13 +126,13 @@ namespace MyApp.Manage
         {
             using (var db = DbFactory.Open())
             {
-                var hasChilds = await db.ExistsAsync<OrganizationEntity>(x => x.ParentId == id);
+                var hasChilds = await db.ExistsAsync<Organization>(x => x.ParentId == id);
                 if (hasChilds)
                 {
                     throw new UserFriendlyException("该组织还有子组织，不能删除。必须先删除子组织。");
                 }
 
-                var c = await db.DeleteByIdAsync<OrganizationEntity>(id);
+                var c = await db.DeleteByIdAsync<Organization>(id);
                 if (c != 1)
                 {
                     throw new UserFriendlyException("删除失败.");

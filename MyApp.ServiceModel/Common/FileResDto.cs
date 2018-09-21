@@ -1,6 +1,6 @@
 ﻿using DayuCloud.Common;
 
-namespace MyApp.ServiceModel.Models
+namespace MyApp.ServiceModel.Common
 {
     /// <summary>
     /// 上传文件的返回信息

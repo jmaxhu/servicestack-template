@@ -6,7 +6,7 @@ namespace MyApp.ServiceModel.Org
     /// <summary>
     /// 组织
     /// </summary>
-    public class OrganizationEntity : Entity
+    public class Organization : Entity
     {
         /// <summary>
         /// 自增id

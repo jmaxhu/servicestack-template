@@ -3,7 +3,7 @@ using System.Data;
 using DayuCloud.Manage;
 using MyApp.Manage;
 using MyApp.ServiceInterface;
-using MyApp.ServiceModel.User;
+using MyApp.ServiceModel.Account;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.Auth;
@@ -18,7 +18,6 @@ namespace MyApp.Tests
     public class UnitTestBase
     {
         protected ServiceStackHost AppHost;
-        protected IUserManage UserManage;
         protected IOrgManage OrgManage;
         protected IDbConnection Db;
 
@@ -46,12 +45,11 @@ namespace MyApp.Tests
                     container.Register<IDbConnectionFactory>(c => dbFactory);
                     container.Register<ICacheClient>(new MemoryCacheClient());
                     container.Register<IAuthRepository>(c =>
-                        new OrmLiteAuthRepository<UserEntity, UserAuthDetails>(dbFactory)
+                        new OrmLiteAuthRepository<UserInfo, UserAuthDetails>(dbFactory)
                         {
                             UseDistinctRoleTables = true
                         });
 
-                    container.RegisterAs<UserManage, IUserManage>();
                     container.RegisterAs<OrgManage, IOrgManage>();
                     container.Register<ISchemaManage>(c => new MysqlSchemaManage("MyApp_test_db"));
                 }
@@ -59,7 +57,6 @@ namespace MyApp.Tests
 
             AppHost.Init();
 
-            UserManage = AppHost.Resolve<IUserManage>();
             OrgManage = AppHost.Resolve<IOrgManage>();
             Db = AppHost.GetDbConnection();
 

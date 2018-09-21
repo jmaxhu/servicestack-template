@@ -1,6 +1,6 @@
 ﻿using ServiceStack.DataAnnotations;
 
-namespace MyApp.ServiceModel.Models
+namespace MyApp.ServiceModel.Common
 {
     /// <summary>
     /// 通用的使用状态

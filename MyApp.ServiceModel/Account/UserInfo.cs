@@ -1,13 +1,13 @@
-﻿using ServiceStack.Auth;
+﻿using DayuCloud.Account.Model.User;
 using ServiceStack.DataAnnotations;
 
-namespace MyApp.ServiceModel.User
+namespace MyApp.ServiceModel.Account
 {
     /// <summary>
     /// 自定义的用户实体
     /// </summary>
     [Alias("User")]
-    public class UserEntity : UserAuth
+    public class UserInfo : User
     {
         /// <summary>
         /// 用户相关联的组织id

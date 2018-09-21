@@ -42,13 +42,13 @@ dotnet test -v=m MyApp.Test/
 用以下命令创建数据库及用户。 数据名外请自行替换。
 
 ```sql
-CREATE DATABASE MyApp_DB DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci; 
+CREATE DATABASE MyApp_DB DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci; 
 
-CREATE USER 'myapp_admin'@'localhost' IDENTIFIED BY 'myapp_admin_123@qwe';
-CREATE USER 'myapp_admin'@'%' IDENTIFIED BY 'myapp_admin_123@qwe';
+CREATE USER 'MyApp_admin'@'localhost' IDENTIFIED BY 'MyApp_admin_123@qwe';
+CREATE USER 'MyApp_admin'@'%' IDENTIFIED BY 'MyApp_admin_123@qwe';
 
-GRANT ALL ON MyApp_DB.* TO 'myapp_admin'@'localhost';
-GRANT ALL ON MyApp_DB.* TO 'myapp_admin'@'%';
+GRANT ALL ON MyApp_DB.* TO 'MyApp_admin'@'localhost';
+GRANT ALL ON MyApp_DB.* TO 'MyApp_admin'@'%';
 
 FLUSH PRIVILEGES;
 ```
