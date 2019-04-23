@@ -1,4 +1,4 @@
-﻿using DayuCloud.Common;
+﻿using MyApp.ServiceModel.Common;
 using ServiceStack.DataAnnotations;
 
 namespace MyApp.ServiceModel.Org
@@ -6,6 +6,7 @@ namespace MyApp.ServiceModel.Org
     /// <summary>
     /// 组织
     /// </summary>
+    [Alias("sys_org")]
     public class Organization : Entity
     {
         /// <summary>

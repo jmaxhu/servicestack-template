@@ -1,12 +1,14 @@
 ﻿using System.Threading.Tasks;
-using DayuCloud.Common;
+using MyApp.ServiceModel.Common;
 using MyApp.Manage;
+using MyApp.ServiceModel;
 using MyApp.ServiceModel.Org;
 using ServiceStack;
 
 namespace MyApp.ServiceInterface
 {
-    public class OrgService : Service
+    [Authenticate]
+    public class OrgService : ServiceStack.Service
     {
         public IOrgManage OrgManage{ get; set; }
 

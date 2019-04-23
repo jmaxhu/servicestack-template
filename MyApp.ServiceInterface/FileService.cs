@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using DayuCloud.Common;
-using MyApp.ServiceModel;
 using MyApp.ServiceModel.Common;
+using MyApp.ServiceModel;
 using ServiceStack;
 
 namespace MyApp.ServiceInterface
 {
-    public class FileService : Service
+    [Authenticate]
+    public class FileService : ServiceStack.Service
     {
         private static async Task<string> GetWebUrl()
         {

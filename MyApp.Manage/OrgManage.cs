@@ -2,8 +2,8 @@
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using DayuCloud.Common;
-using DayuCloud.Manage;
+using MyApp.ServiceModel.Common;
+using MyApp.Manage;
 using MyApp.ServiceModel.Org;
 using ServiceStack.OrmLite;
 

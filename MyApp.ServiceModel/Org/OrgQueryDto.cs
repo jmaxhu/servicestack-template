@@ -1,4 +1,4 @@
-﻿using DayuCloud.Common;
+﻿using MyApp.ServiceModel.Common;
 using ServiceStack;
 
 namespace MyApp.ServiceModel.Org

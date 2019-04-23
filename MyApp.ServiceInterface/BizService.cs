@@ -2,17 +2,17 @@
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using DayuCloud.Common;
-using DayuCloud.Manage;
-using DayuCloud.Models;
+using MyApp.ServiceModel.Common;
+using MyApp.Manage;
 using MyApp.ServiceModel;
-using MyApp.ServiceModel.Account;
+using MyApp.ServiceModel.User;
 using ServiceStack;
 using ServiceStack.OrmLite;
 
 namespace MyApp.ServiceInterface
 {
-    public class BizService : Service
+    [Authenticate]
+    public class BizService : ServiceStack.Service
     {
         public IAutoQueryDb AutoQuery { get; set; }
 
@@ -106,7 +106,7 @@ namespace MyApp.ServiceInterface
             }
 
             var userId = long.Parse(GetSession().UserAuthId);
-            var user = await Db.SingleByIdAsync<UserInfo>(userId);
+            var user = await Db.SingleByIdAsync<User>(userId);
             if (user == null)
             {
                 throw new UserFriendlyException("用户不存在。");
@@ -241,7 +241,7 @@ namespace MyApp.ServiceInterface
             }
 
             var userId = long.Parse(GetSession().UserAuthId);
-            var user = await Db.SingleByIdAsync<UserInfo>(userId);
+            var user = await Db.SingleByIdAsync<User>(userId);
 
             if (user == null)
             {

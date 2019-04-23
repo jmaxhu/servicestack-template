@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DayuCloud.Manage;
 using MyApp.Manage;
-using MyApp.ServiceModel.Account;
+using MyApp.ServiceModel.User;
 using MyApp.ServiceModel.Common;
 using MyApp.ServiceModel.Org;
 using ServiceStack;
@@ -44,7 +43,7 @@ namespace MyApp.Tests
 
                 db.DropTable<UserAuthRole>();
                 db.DropTable<UserAuthDetails>();
-                db.DropTable<UserInfo>();
+                db.DropTable<User>();
 
                 //删除其它表
                 Task.Run(async () =>
@@ -56,7 +55,7 @@ namespace MyApp.Tests
                     }
                 }).Wait();
 
-                ((OrmLiteAuthRepository<UserInfo, UserAuthDetails>) appHost.Resolve<IAuthRepository>())
+                ((OrmLiteAuthRepository<User, UserAuthDetails>) appHost.Resolve<IAuthRepository>())
                     .InitSchema();
 
                 db.CreateTable<Organization>();
@@ -69,7 +68,7 @@ namespace MyApp.Tests
         public static void Create(ServiceStackHost appHost)
         {
             var dbFactory = appHost.Resolve<IDbConnectionFactory>();
-            var authRepo = (OrmLiteAuthRepository<UserInfo, UserAuthDetails>) appHost.Resolve<IAuthRepository>();
+            var authRepo = (OrmLiteAuthRepository<User, UserAuthDetails>) appHost.Resolve<IAuthRepository>();
             var schemaManage = appHost.Resolve<ISchemaManage>();
 
             var rand = new Random(DateTime.Now.Millisecond);
@@ -96,7 +95,7 @@ namespace MyApp.Tests
                     var userCount = rand.Next(10, 50);
                     for (var i = 0; i < userCount; i++)
                     {
-                        var user = new UserInfo
+                        var user = new User
                         {
                             UserName = $"username_{i}",
                             Email = $"username_{i}@dayu.com",

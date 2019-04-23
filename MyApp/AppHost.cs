@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DayuCloud.Account.Model.Permission;
-using DayuCloud.Account.Model.Role;
-using DayuCloud.Manage;
+using MyApp.ServiceModel.Permission;
+using MyApp.ServiceModel.Role;
 using MyApp.Manage;
 using MyApp.ServiceInterface;
 using MyApp.ServiceModel.Org;
 using Funq;
-using MyApp.ServiceModel.Account;
 using MyApp.ServiceModel.Common;
+using MyApp.ServiceModel.User;
 using ServiceStack;
 using ServiceStack.Api.OpenApi;
 using ServiceStack.Auth;
@@ -98,18 +97,6 @@ namespace MyApp
             Plugins.Add(new ValidationFeature());
             container.RegisterValidators(typeof(PermissionValidator).Assembly);
 
-            #region 错误处理
-
-            ServiceExceptionHandlersAsync.Add((req, request, exp) =>
-            {
-                var log = LogManager.GetLogger("Exception Handlers");
-                log.Error(exp.Message, exp);
-
-                return null;
-            });
-
-            #endregion
-
             // redis init
             var redisConnStr = $"redis://{AppSettings.Get<string>("RedisHost")}:{AppSettings.Get<string>("RedisPort")}";
             var redisManager = new RedisManagerPool(redisConnStr);
@@ -137,17 +124,25 @@ namespace MyApp
 
             container.Register<IDbConnectionFactory>(c => dbFactory);
             container.Register<ICacheClient>(new MemoryCacheClient());
-            container.Register<IAuthRepository>(c => new OrmLiteAuthRepository<UserInfo, UserAuthDetails>(dbFactory)
+            container.Register<IAuthRepository>(c => new OrmLiteAuthRepository<User, UserAuthDetails>(dbFactory)
             {
                 UseDistinctRoleTables = false
             });
 
-//            container.Register<IAccountManage>(c => new MyAccountManager<UserInfo>());
+            container.Register<IAccountManage>(c => new LocalAccountManage<User>());
             container.RegisterAs<OrgManage, IOrgManage>();
             container.RegisterAs<ReflectionManage, IReflectionManage>();
-            container.Register<ISchemaManage>(c => new MysqlSchemaManage("MyApp_db"));
+            container.Register<ISchemaManage>(c => new MysqlSchemaManage("MyApp_DB"));
 
-//            InitData(container);
+            InitData(container);
+        }
+
+        public override void OnExceptionTypeFilter(Exception ex, ResponseStatus responseStatus)
+        {
+            var log = LogManager.GetLogger("Exception Handlers");
+            log.Error($"{responseStatus.ToJson()}", ex);
+
+            base.OnExceptionTypeFilter(ex, responseStatus);
         }
 
         private static void InitData(Container container)
@@ -155,12 +150,12 @@ namespace MyApp
             var dbFactory = container.Resolve<IDbConnectionFactory>();
             using (var db = dbFactory.OpenDbConnection())
             {
-                if (!db.TableExists<UserInfo>())
+                if (!db.TableExists<User>())
                 {
                     container.Resolve<IAuthRepository>().InitSchema();
                     var authRepo =
-                        (OrmLiteAuthRepository<UserInfo, UserAuthDetails>) container.Resolve<IAuthRepository>();
-                    var adminUser = new UserInfo
+                        (OrmLiteAuthRepository<User, UserAuthDetails>) container.Resolve<IAuthRepository>();
+                    var adminUser = new User
                     {
                         UserName = "admin_user",
                         DisplayName = "管理员",

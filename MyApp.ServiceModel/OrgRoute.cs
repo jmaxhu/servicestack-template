@@ -1,6 +1,7 @@
-﻿using ServiceStack;
+﻿using MyApp.ServiceModel.Org;
+using ServiceStack;
 
-namespace MyApp.ServiceModel.Org
+namespace MyApp.ServiceModel
 {
     [Route("/org", Verbs = "GET", Notes = "分页取组织列表, 必须提供第几页及每页记录数参数.", Summary = "取组织列表")]
     [Tag("组织管理")]

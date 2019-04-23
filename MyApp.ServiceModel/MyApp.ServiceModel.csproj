@@ -3,8 +3,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DayuCloud" Version="1.1.8" />
-    <PackageReference Include="DayuCloud.Account" Version="1.1.8" />
     <PackageReference Include="ServiceStack" Version="5.5.0" />
     <PackageReference Include="ServiceStack.Interfaces" Version="5.5.0" />
   </ItemGroup>

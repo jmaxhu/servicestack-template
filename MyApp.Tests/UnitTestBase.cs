@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Data;
-using DayuCloud.Manage;
 using MyApp.Manage;
 using MyApp.ServiceInterface;
-using MyApp.ServiceModel.Account;
+using MyApp.ServiceModel.User;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.Auth;
@@ -45,7 +44,7 @@ namespace MyApp.Tests
                     container.Register<IDbConnectionFactory>(c => dbFactory);
                     container.Register<ICacheClient>(new MemoryCacheClient());
                     container.Register<IAuthRepository>(c =>
-                        new OrmLiteAuthRepository<UserInfo, UserAuthDetails>(dbFactory)
+                        new OrmLiteAuthRepository<User, UserAuthDetails>(dbFactory)
                         {
                             UseDistinctRoleTables = true
                         });
