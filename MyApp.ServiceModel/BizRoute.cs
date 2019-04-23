@@ -2,7 +2,7 @@
 
 namespace MyApp.ServiceModel
 {
-    [Api("统一的业务表操作Api")]
+    [Tag("统一的业务表操作")]
     [Route("/biz", Verbs = "GET", Summary = "统一的业务表搜索入口")]
     public class GetBizs : QueryBase, IReturn<IQueryResponse>
     {
@@ -10,7 +10,7 @@ namespace MyApp.ServiceModel
         public string TableName { get; set; }
     }
 
-    [Api("统一的业务表操作Api")]
+    [Tag("统一的业务表操作")]
     [Route("/biz", Verbs = "POST", Summary = "统一的业务表保存")]
     public class SaveBiz : IReturn<long>
     {
@@ -21,7 +21,7 @@ namespace MyApp.ServiceModel
         public long DataCatalogId { get; set; }
     }
 
-    [Api("统一的业务表操作Api")]
+    [Tag("统一的业务表操作")]
     [Route("/biz", Verbs = "DELETE", Summary = "统一的业务表删除")]
     public class DeleteBiz : IReturn<long>
     {

@@ -17,8 +17,11 @@ using ServiceStack.Api.OpenApi;
 using ServiceStack.Auth;
 using ServiceStack.Caching;
 using ServiceStack.Data;
+using ServiceStack.Logging;
+using ServiceStack.Logging.NLogger;
 using ServiceStack.OrmLite;
 using ServiceStack.Redis;
+using ServiceStack.Text;
 using ServiceStack.Validation;
 using StackExchange.Profiling;
 using StackExchange.Profiling.Data;
@@ -32,11 +35,12 @@ namespace MyApp
 //            typeof(AccountService).Assembly
         )
         {
+            LogManager.LogFactory = new NLogFactory();
         }
 
         public override void Configure(Container container)
         {
-            ServiceStack.Text.JsConfig.EmitCamelCaseNames = true;
+            JsConfig.TextCase = TextCase.CamelCase;
 
             var debugMode = AppSettings.Get(nameof(HostConfig.DebugMode), false);
             var hostConfig = new HostConfig
@@ -93,6 +97,18 @@ namespace MyApp
             // 注册验证功能
             Plugins.Add(new ValidationFeature());
             container.RegisterValidators(typeof(PermissionValidator).Assembly);
+
+            #region 错误处理
+
+            ServiceExceptionHandlersAsync.Add((req, request, exp) =>
+            {
+                var log = LogManager.GetLogger("Exception Handlers");
+                log.Error(exp.Message, exp);
+
+                return null;
+            });
+
+            #endregion
 
             // redis init
             var redisConnStr = $"redis://{AppSettings.Get<string>("RedisHost")}:{AppSettings.Get<string>("RedisPort")}";

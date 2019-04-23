@@ -4,7 +4,7 @@ using ServiceStack;
 
 namespace MyApp.ServiceModel
 {
-    [Api("文件上传Api")]
+    [Tag("文件上传")]
     [Route("/file", Verbs = "POST", Summary = "文件上传接口")]
     public class SaveUploadFile : IReturn<List<FileResDto>>
     {

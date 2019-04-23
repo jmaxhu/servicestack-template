@@ -142,7 +142,7 @@ namespace MyApp.ServiceInterface
             if (dbObj != null)
             {
                 // 如果是更新操作，先复制原始数据到新对象
-                entityObj.PopulateInstance(dbObj);
+                entityObj.PopulateWithNonDefaultValues(dbObj);
             }
 
             foreach (var propInfo in entityType.GetProperties())
