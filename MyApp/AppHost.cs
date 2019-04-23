@@ -98,18 +98,6 @@ namespace MyApp
             Plugins.Add(new ValidationFeature());
             container.RegisterValidators(typeof(PermissionValidator).Assembly);
 
-            #region 错误处理
-
-            ServiceExceptionHandlersAsync.Add((req, request, exp) =>
-            {
-                var log = LogManager.GetLogger("Exception Handlers");
-                log.Error(exp.Message, exp);
-
-                return null;
-            });
-
-            #endregion
-
             // redis init
             var redisConnStr = $"redis://{AppSettings.Get<string>("RedisHost")}:{AppSettings.Get<string>("RedisPort")}";
             var redisManager = new RedisManagerPool(redisConnStr);
@@ -148,6 +136,14 @@ namespace MyApp
             container.Register<ISchemaManage>(c => new MysqlSchemaManage("MyApp_db"));
 
 //            InitData(container);
+        }
+
+        public override void OnExceptionTypeFilter(Exception ex, ResponseStatus responseStatus)
+        {
+            var log = LogManager.GetLogger("Exception Handlers");
+            log.Error($"{responseStatus.ToJson()}", ex);
+
+            base.OnExceptionTypeFilter(ex, responseStatus);
         }
 
         private static void InitData(Container container)
