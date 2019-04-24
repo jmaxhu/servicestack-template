@@ -17,12 +17,6 @@ namespace MyApp.ServiceModel.Role
         public long Id { get; set; }
 
         /// <summary>
-        /// 注册应用id
-        /// </summary>
-        [Index]
-        public long AppClientId { get; set; }
-
-        /// <summary>
         /// 角色分组父id
         /// </summary>
         [Index]

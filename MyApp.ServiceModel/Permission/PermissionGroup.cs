@@ -17,12 +17,6 @@ namespace MyApp.ServiceModel.Permission
         public long Id { get; set; }
 
         /// <summary>
-        /// 应用id
-        /// </summary>
-        [Index]
-        public long AppClientId { get; set; }
-
-        /// <summary>
         /// 父分组id
         /// </summary>
         [Index]

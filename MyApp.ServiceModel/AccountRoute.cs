@@ -35,9 +35,6 @@ namespace MyApp.ServiceModel
     {
         [ApiMember(IsRequired = true, DataType = "integer", Description = "用户id")]
         public int Id { get; set; }
-
-        [ApiMember(IsRequired = true, DataType = "string", Description = "应用key")]
-        public string AppKey { get; set; }
     }
 
     [Tag("账户管理")]
@@ -62,9 +59,6 @@ namespace MyApp.ServiceModel
     {
         [ApiMember(IsRequired = true, DataType = "integer", Format = "int64", Description = "角色分组id")]
         public long Id { get; set; }
-
-        [ApiMember(IsRequired = true, DataType = "string", Description = "应用key")]
-        public string AppKey { get; set; }
     }
 
     [Tag("账户管理")]
@@ -79,9 +73,6 @@ namespace MyApp.ServiceModel
     {
         [ApiMember(IsRequired = true, DataType = "integer", Format = "int64", Description = "角色id")]
         public long Id { get; set; }
-
-        [ApiMember(IsRequired = true, DataType = "string", Description = "应用key")]
-        public string AppKey { get; set; }
     }
 
     [Tag("账户管理")]
@@ -96,9 +87,6 @@ namespace MyApp.ServiceModel
     {
         [ApiMember(IsRequired = true, DataType = "integer", Format = "int64", Description = "角色id")]
         public long Id { get; set; }
-
-        [ApiMember(IsRequired = true, DataType = "string", Description = "应用key")]
-        public string AppKey { get; set; }
     }
 
     [Tag("账户管理")]
@@ -125,9 +113,6 @@ namespace MyApp.ServiceModel
     {
         [ApiMember(IsRequired = true, DataType = "integer", Format = "int64", Description = "权限分组id")]
         public long Id { get; set; }
-
-        [ApiMember(IsRequired = true, DataType = "string", Description = "应用key")]
-        public string AppKey { get; set; }
     }
 
     [Tag("账户管理")]
@@ -142,9 +127,6 @@ namespace MyApp.ServiceModel
     {
         [ApiMember(IsRequired = true, DataType = "integer", Format = "int64", Description = "权限项id")]
         public long Id { get; set; }
-
-        [ApiMember(IsRequired = true, DataType = "string", Description = "应用key")]
-        public string AppKey { get; set; }
     }
 
     [Tag("账户管理")]
@@ -159,9 +141,6 @@ namespace MyApp.ServiceModel
     {
         [ApiMember(IsRequired = true, DataType = "integer", Format = "int64", Description = "权限id")]
         public long Id { get; set; }
-
-        [ApiMember(IsRequired = true, DataType = "string", Description = "应用key")]
-        public string AppKey { get; set; }
     }
 
 
@@ -189,9 +168,6 @@ namespace MyApp.ServiceModel
     {
         [ApiMember(IsRequired = true, DataType = "integer", Description = "行政区划id")]
         public int Id { get; set; }
-
-        [ApiMember(IsRequired = true, DataType = "string", Description = "应用key")]
-        public string AppKey { get; set; }
     }
 
     [Tag("账户管理")]
@@ -200,9 +176,6 @@ namespace MyApp.ServiceModel
     {
         [ApiMember(IsRequired = true, Description = "行政区划编码")]
         public string Code { get; set; }
-
-        [ApiMember(IsRequired = true, DataType = "string", Description = "应用key")]
-        public string AppKey { get; set; }
     }
 
     [Tag("账户管理")]
@@ -217,8 +190,5 @@ namespace MyApp.ServiceModel
     {
         [ApiMember(IsRequired = true, Description = "行政区划id")]
         public int Id { get; set; }
-
-        [ApiMember(IsRequired = true, DataType = "string", Description = "应用key")]
-        public string AppKey { get; set; }
     }
 }

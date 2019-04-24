@@ -52,9 +52,8 @@ namespace MyApp.Manage
         /// 删除一个用户
         /// </summary>
         /// <param name="id">用户id</param>
-        /// <param name="appKey">应用 key</param>
         /// <returns>如果用户有被使用,则不能删除.</returns>
-        Task<int> DeleteUser(int id, string appKey);
+        Task<int> DeleteUser(int id);
 
         /// <summary>
         /// 根据条件返回角色分组信息
@@ -75,9 +74,8 @@ namespace MyApp.Manage
         /// 删除一个角色分组
         /// </summary>
         /// <param name="id">分组id</param>
-        /// <param name="appKey">应用key</param>
         /// <returns>成功删除时返回id</returns>
-        Task<long> DeleteRoleGroup(long id, string appKey);
+        Task<long> DeleteRoleGroup(long id);
 
         /// <summary>
         /// 根据查询条件得到角色列表
@@ -90,9 +88,8 @@ namespace MyApp.Manage
         /// 根据角色id得到角色信息
         /// </summary>
         /// <param name="id">角色id</param>
-        /// <param name="appKey">应用key</param>
         /// <returns>角色信息</returns>
-        Task<RoleResDto> GetRoleById(long id, string appKey);
+        Task<RoleResDto> GetRoleById(long id);
 
         /// <summary>
         /// 新增或修改角色. 如果角色分组是新的是自动新增分组。
@@ -105,9 +102,8 @@ namespace MyApp.Manage
         /// 根据角色id和应用key删除一个角色。
         /// </summary>
         /// <param name="id">角色id</param>
-        /// <param name="appKey">应用key</param>
         /// <returns>返回角色id</returns>
-        Task<long> DeleteRole(long id, string appKey);
+        Task<long> DeleteRole(long id);
 
         /// <summary>
         /// 给用户授权角色
@@ -135,10 +131,9 @@ namespace MyApp.Manage
         /// 如果该分组有具体权限项，则不能删除。
         /// </summary>
         /// <param name="id">分组id</param>
-        /// <param name="appKey">应用key</param>
         /// <returns>已删除的分组id</returns>
         /// <exception cref="UserFriendlyException">分组下有具体权限项时，不能删除。抛异常。</exception>
-        Task<long> DeletePermissionGroup(long id, string appKey);
+        Task<long> DeletePermissionGroup(long id);
 
         /// <summary>
         /// 根据搜索条件得到授权列表。
@@ -152,9 +147,8 @@ namespace MyApp.Manage
         /// 根据id和应用key得到授权信息
         /// </summary>
         /// <param name="id">授权id</param>
-        /// <param name="appKey">应用key</param>
         /// <returns>授权信息</returns>
-        Task<PermissionResDto> GetPermissionById(long id, string appKey);
+        Task<PermissionResDto> GetPermissionById(long id);
 
         /// <summary>
         /// 新增或编辑一个授权
@@ -167,9 +161,8 @@ namespace MyApp.Manage
         /// 根据id和应用key删除一个授权。
         /// </summary>
         /// <param name="id">授权id</param>
-        /// <param name="appKey">应用key</param>
         /// <returns>删除的授权id</returns>
-        Task<long> DeletePermission(long id, string appKey);
+        Task<long> DeletePermission(long id);
 
 
         /// <summary>
@@ -183,17 +176,15 @@ namespace MyApp.Manage
         /// 根据编号得到某个行政区划的信息
         /// </summary>
         /// <param name="id">编号</param>
-        /// <param name="appKey">应用key</param>
         /// <returns>单个行政区划信息</returns>
-        Task<DistrictResDto> GetDistrictById(int id, string appKey);
+        Task<DistrictResDto> GetDistrictById(int id);
 
         /// <summary>
         /// 根据行政区划代码查询该信息
         /// </summary>
         /// <param name="code">行政区划代码（邮编)</param>
-        /// <param name="appKey">应用key</param>
         /// <returns></returns>
-        Task<DistrictResDto> GetDistrictByCode(string code, string appKey);
+        Task<DistrictResDto> GetDistrictByCode(string code);
 
         /// <summary>
         /// 保存一个行政区划
@@ -206,8 +197,7 @@ namespace MyApp.Manage
         /// 删除一个行政区划
         /// </summary>
         /// <param name="id">行政区划id</param>
-        /// <param name="appKey">应用key</param>
         /// <returns>删除的id</returns>
-        Task<int> DeleteDistrict(int id, string appKey);
+        Task<int> DeleteDistrict(int id);
     }
 }

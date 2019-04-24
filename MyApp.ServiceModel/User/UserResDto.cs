@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MyApp.ServiceModel.District;
 using MyApp.ServiceModel.Common;
 
@@ -50,5 +51,10 @@ namespace MyApp.ServiceModel.User
         /// 用户所在系统的所在地，地区信息
         /// </summary>
         public DistrictResDto District { get; set; }
+        
+        /// <summary>
+        /// 用户对应的角色id列表
+        /// </summary>
+        public List<int> RoleIds { get; set; }
     }
 }

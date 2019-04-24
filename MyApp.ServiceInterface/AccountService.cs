@@ -10,7 +10,7 @@ using MyApp.ServiceModel.Common;
 using ServiceStack;
 using AssignRoles = MyApp.ServiceModel.AssignRoles;
 
-namespace MyApp.ServiceInterface.Service
+namespace MyApp.ServiceInterface
 {
     /// <summary>
     /// 账户服务，包括：用户，角色，权限
@@ -38,7 +38,7 @@ namespace MyApp.ServiceInterface.Service
 
         public virtual async Task<long> Delete(DeleteUser request)
         {
-            await AccountManage.DeleteUser(request.Id, request.AppKey);
+            await AccountManage.DeleteUser(request.Id);
 
             return request.Id;
         }
@@ -55,7 +55,7 @@ namespace MyApp.ServiceInterface.Service
 
         public virtual async Task<long> Delete(DeleteRoleGroup request)
         {
-            return await AccountManage.DeleteRoleGroup(request.Id, request.AppKey);
+            return await AccountManage.DeleteRoleGroup(request.Id);
         }
 
         public virtual async Task<List<RoleResDto>> Get(GetRoles query)
@@ -65,7 +65,7 @@ namespace MyApp.ServiceInterface.Service
 
         public virtual async Task<RoleResDto> Get(GetRole query)
         {
-            return await AccountManage.GetRoleById(query.Id, query.AppKey);
+            return await AccountManage.GetRoleById(query.Id);
         }
 
         public virtual async Task<long> Post(SaveRole request)
@@ -75,7 +75,7 @@ namespace MyApp.ServiceInterface.Service
 
         public virtual async Task<long> Delete(DeleteRole request)
         {
-            return await AccountManage.DeleteRole(request.Id, request.AppKey);
+            return await AccountManage.DeleteRole(request.Id);
         }
 
         public virtual async Task<int> Post(AssignRoles request)
@@ -85,79 +85,37 @@ namespace MyApp.ServiceInterface.Service
 
         public virtual async Task<Node<PermissionGroupResDto>> Get(GetPermissionGroups query)
         {
-            if (query.AppKey == "0")
-            {
-                var local = new LocalAccountManage<User>();
-                return await local.GetPermissionGroups(query);
-            }
-
             return await AccountManage.GetPermissionGroups(query);
         }
 
         public virtual async Task<long> Post(SavePermissionGroup request)
         {
-            if (request.AppKey == "0")
-            {
-                var local = new LocalAccountManage<User>();
-                return await local.SavePermissionGroup(request);
-            }
-
             return await AccountManage.SavePermissionGroup(request);
         }
 
         public virtual async Task<long> Delete(DeletePermissionGroup request)
         {
-            if (request.AppKey == "0")
-            {
-                var local = new LocalAccountManage<User>();
-                return await local.DeletePermissionGroup(request.Id, "");
-            }
-
-            return await AccountManage.DeletePermissionGroup(request.Id, request.AppKey);
+            return await AccountManage.DeletePermissionGroup(request.Id);
         }
 
         public virtual async Task<PagedResult<PermissionResDto>> Get(GetPermissions query)
         {
-            if (query.AppKey == "0")
-            {
-                var local = new LocalAccountManage<User>();
-                return await local.GetPermissions(query);
-            }
-
             return await AccountManage.GetPermissions(query);
         }
 
         public virtual async Task<PermissionResDto> Get(GetPermissionById query)
         {
-            if (query.AppKey == "0")
-            {
-                var local = new LocalAccountManage<User>();
-                return await local.GetPermissionById(query.Id, "");
-            }
-
-            return await AccountManage.GetPermissionById(query.Id, query.AppKey);
+            return await AccountManage.GetPermissionById(query.Id);
         }
 
         public virtual async Task<long> Post(SavePermission request)
         {
-            if (request.AppKey == "0")
-            {
-                var local = new LocalAccountManage<User>();
-                return await local.SavePermission(request);
-            }
-
             return await AccountManage.SavePermission(request);
         }
 
         public virtual async Task<long> Delete(DeletePermission request)
         {
-            if (request.AppKey == "0")
-            {
-                var local = new LocalAccountManage<User>();
-                return await local.DeletePermission(request.Id, "");
-            }
-
-            return await AccountManage.DeletePermission(request.Id, request.AppKey);
+            return await AccountManage.DeletePermission(request.Id);
         }
 
         public virtual async Task<int> Post(ChangePassword request)
@@ -177,12 +135,12 @@ namespace MyApp.ServiceInterface.Service
 
         public virtual async Task<DistrictResDto> Get(GetDistrict query)
         {
-            return await AccountManage.GetDistrictById(query.Id, query.AppKey);
+            return await AccountManage.GetDistrictById(query.Id);
         }
 
         public virtual async Task<DistrictResDto> Get(GetDistrictByCode query)
         {
-            return await AccountManage.GetDistrictByCode(query.Code, query.AppKey);
+            return await AccountManage.GetDistrictByCode(query.Code);
         }
 
         public virtual async Task<int> Post(SaveDistrict request)
@@ -192,7 +150,7 @@ namespace MyApp.ServiceInterface.Service
 
         public virtual async Task<int> Delete(DeleteDistrict request)
         {
-            return await AccountManage.DeleteDistrict(request.Id, request.AppKey);
+            return await AccountManage.DeleteDistrict(request.Id);
         }
     }
 }

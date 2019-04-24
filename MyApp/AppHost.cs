@@ -9,7 +9,7 @@ using MyApp.Manage;
 using MyApp.ServiceInterface;
 using MyApp.ServiceModel.Org;
 using Funq;
-using MyApp.ServiceModel.Common;
+using MyApp.ServiceModel.District;
 using MyApp.ServiceModel.User;
 using ServiceStack;
 using ServiceStack.Api.OpenApi;
@@ -31,7 +31,6 @@ namespace MyApp
     {
         public AppHost() : base("MyApp",
             typeof(FileService).Assembly
-//            typeof(AccountService).Assembly
         )
         {
             LogManager.LogFactory = new NLogFactory();
@@ -95,7 +94,7 @@ namespace MyApp
 
             // 注册验证功能
             Plugins.Add(new ValidationFeature());
-            container.RegisterValidators(typeof(PermissionValidator).Assembly);
+            container.RegisterValidators(typeof(RoleGroupValidator).Assembly);
 
             // redis init
             var redisConnStr = $"redis://{AppSettings.Get<string>("RedisHost")}:{AppSettings.Get<string>("RedisPort")}";
@@ -129,7 +128,7 @@ namespace MyApp
                 UseDistinctRoleTables = false
             });
 
-            container.Register<IAccountManage>(c => new LocalAccountManage<User>());
+            container.RegisterAs<LocalAccountManage, IAccountManage>();
             container.RegisterAs<OrgManage, IOrgManage>();
             container.RegisterAs<ReflectionManage, IReflectionManage>();
             container.Register<ISchemaManage>(c => new MysqlSchemaManage("MyApp_DB"));
@@ -160,8 +159,8 @@ namespace MyApp
                         UserName = "admin_user",
                         DisplayName = "管理员",
                         Email = "admin_user@dayu.com",
-                        OrganizationId = 0,
-                        Role = RoleConstants.Admin
+                        OrgId = 0,
+                        UserType = UserType.Admin
                     };
 
                     authRepo.CreateUserAuth(adminUser, "123456@qwe");
@@ -174,6 +173,7 @@ namespace MyApp
                 db.CreateTableIfNotExists<Permission>();
                 db.CreateTableIfNotExists<RolePermission>();
                 db.CreateTableIfNotExists<UserRole>();
+                db.CreateTableIfNotExists<District>();
             }
         }
     }

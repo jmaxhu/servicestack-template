@@ -99,10 +99,8 @@ namespace MyApp.Tests
                         {
                             UserName = $"username_{i}",
                             Email = $"username_{i}@dayu.com",
-                            OrganizationId = childOrgIds[rand.Next(0, childOrgIds.Count - 1)],
-                            DisplayName = $"用户_{i}",
-                            Role = i % 2 == 0 ? RoleConstants.Admin :
-                                i % 3 == 0 ? RoleConstants.Watcher : RoleConstants.Operator
+                            OrgId = childOrgIds[rand.Next(0, childOrgIds.Count - 1)],
+                            DisplayName = $"用户_{i}"
                         };
                         if (i % 4 == 0)
                         {

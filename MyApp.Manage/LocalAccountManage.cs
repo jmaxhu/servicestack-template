@@ -16,7 +16,7 @@ using ServiceStack.OrmLite;
 
 namespace MyApp.Manage
 {
-    public class LocalAccountManage<T> : ManageBase, IAccountManage where T : User
+    public class LocalAccountManage : ManageBase, IAccountManage
     {
         public IValidator<UserSaveDto> UserValidator { get; set; }
         public IValidator<RoleSaveDto> RoleValidator { get; set; }
@@ -29,7 +29,7 @@ namespace MyApp.Manage
         /// <param name="queryDto">用户查询对象，可以是继承自 UserQueryDto 的子类实例。</param>
         /// <param name="builder">基于 ServiceStack 的 SqlExpress，可以添加其它过滤条件。</param>
         /// <returns></returns>
-        protected virtual async Task FilterUserAsync(UserQueryDto queryDto, SqlExpression<T> builder)
+        protected virtual async Task FilterUserAsync(UserQueryDto queryDto, SqlExpression<User> builder)
         {
             await Task.CompletedTask;
         }
@@ -62,7 +62,7 @@ namespace MyApp.Manage
         /// </summary>
         /// <param name="db">数据库连接</param>
         /// <param name="userSaveDto">用户保存对象</param>
-        /// <typeparam name="T">User 或它的子类</typeparam>
+        /// <Userypeparam name="T">User 或它的子类</typeparam>
         /// <returns>Task</returns>
         protected virtual async Task SaveOtherUserInfoAsync(IDbConnection db, UserSaveDto userSaveDto)
         {
@@ -84,9 +84,9 @@ namespace MyApp.Manage
         /// </summary>
         /// <param name="db">数据库连接</param>
         /// <param name="user">待删除的用户</param>
-        /// <typeparam name="T">用户类型</typeparam>
+        /// <Userypeparam name="T">用户类型</typeparam>
         /// <returns>是否</returns>
-        protected virtual async Task<bool> CanDeleteUserAsync(IDbConnection db, T user)
+        protected virtual async Task<bool> CanDeleteUserAsync(IDbConnection db, User user)
         {
             return await Task.FromResult(true);
         }
@@ -95,7 +95,7 @@ namespace MyApp.Manage
         {
             using (var db = GetConnection())
             {
-                var builder = db.From<T>();
+                var builder = db.From<User>();
 
                 if (queryDto.ValidStatus == ValidStatus.Invalid)
                 {
@@ -126,6 +126,8 @@ namespace MyApp.Manage
                 {
                     var resDto = user.ConvertTo<UserResDto>();
                     resDto.ValidStatus = user.LockedDate.HasValue ? ValidStatus.Invalid : ValidStatus.Valid;
+                    resDto.RoleIds = db.Column<int>(
+                        db.From<UserRole>().Where(x => x.UserId == user.Id).Select(x => x.RoleId));
                     userResDtos.Add(resDto);
                 });
 
@@ -203,7 +205,7 @@ namespace MyApp.Manage
                 if (!isNew)
                 {
                     // 用户名不能变更
-                    var userName = await db.ScalarAsync<string>(db.From<T>().Where(x => x.Id == userSaveDto.Id)
+                    var userName = await db.ScalarAsync<string>(db.From<User>().Where(x => x.Id == userSaveDto.Id)
                         .Select(x => x.UserName));
                     if (userSaveDto.UserName != userName)
                     {
@@ -213,17 +215,17 @@ namespace MyApp.Manage
 
                 // 用户名不能重复
                 var userExists = isNew
-                    ? await db.ExistsAsync<T>(x => x.UserName == userSaveDto.UserName)
-                    : await db.ExistsAsync<T>(x => x.UserName == userSaveDto.UserName && x.Id != userSaveDto.Id);
+                    ? await db.ExistsAsync<User>(x => x.UserName == userSaveDto.UserName)
+                    : await db.ExistsAsync<User>(x => x.UserName == userSaveDto.UserName && x.Id != userSaveDto.Id);
                 if (userExists)
                 {
                     throw new UserFriendlyException($"用户名: {userSaveDto.UserName} 已存在，保存失败。");
                 }
 
                 var authRepo =
-                    (OrmLiteAuthRepository<T, UserAuthDetails>) HostContext.AppHost.GetAuthRepository();
+                    (OrmLiteAuthRepository<User, UserAuthDetails>) HostContext.AppHost.GetAuthRepository();
 
-                var dbUser = await db.SingleAsync<T>(x => x.UserName == userSaveDto.UserName);
+                var dbUser = await db.SingleAsync<User>(x => x.UserName == userSaveDto.UserName);
 
                 using (var trans = db.OpenTransaction())
                 {
@@ -232,7 +234,7 @@ namespace MyApp.Manage
                         var user = userSaveDto.ConvertTo<User>();
                         // 设置邮箱和锁定状态
                         user.Email = $"{userSaveDto.UserName}@dayu.com";
-                        dbUser = (T) authRepo.CreateUserAuth(user, userSaveDto.Password);
+                        dbUser = (User) authRepo.CreateUserAuth(user, userSaveDto.Password);
                         userSaveDto.Id = dbUser.Id;
                     }
                     else
@@ -265,6 +267,16 @@ namespace MyApp.Manage
                             @where: x => x.Id == dbUser.Id);
                     }
 
+                    // 处理角色, 先删除再添加
+                    await db.DeleteAsync<UserRole>(x => x.UserId == userSaveDto.Id);
+                    if (userSaveDto.RoleIds != null && userSaveDto.RoleIds.Count > 0)
+                    {
+                        foreach (var roleId in userSaveDto.RoleIds)
+                        {
+                            await db.InsertAsync(new UserRole {UserId = (int) userSaveDto.Id, RoleId = roleId});
+                        }
+                    }
+
                     trans.Commit();
 
                     return userSaveDto.Id ?? 0;
@@ -277,7 +289,7 @@ namespace MyApp.Manage
         {
             using (var db = GetConnection())
             {
-                var user = await db.SingleByIdAsync<T>(request.UserId);
+                var user = await db.SingleByIdAsync<User>(request.UserId);
                 if (user == null)
                 {
                     throw new UserFriendlyException("用户不存在.");
@@ -295,7 +307,7 @@ namespace MyApp.Manage
                     throw new UserFriendlyException("旧密码不正确。");
                 }
 
-                var authRepo = (OrmLiteAuthRepository<T, UserAuthDetails>) HostContext.AppHost.GetAuthRepository();
+                var authRepo = (OrmLiteAuthRepository<User, UserAuthDetails>) HostContext.AppHost.GetAuthRepository();
 
                 authRepo.UpdateUserAuth(user, user, request.NewPassword);
 
@@ -307,7 +319,7 @@ namespace MyApp.Manage
         {
             using (var db = GetConnection())
             {
-                var user = await db.SingleByIdAsync<T>(request.UserId);
+                var user = await db.SingleByIdAsync<User>(request.UserId);
                 if (user == null)
                 {
                     throw new UserFriendlyException("用户不存在.");
@@ -319,18 +331,18 @@ namespace MyApp.Manage
                     throw new UserFriendlyException("密码不小于2位.");
                 }
 
-                var authRepo = (OrmLiteAuthRepository<T, UserAuthDetails>) HostContext.AppHost.GetAuthRepository();
+                var authRepo = (OrmLiteAuthRepository<User, UserAuthDetails>) HostContext.AppHost.GetAuthRepository();
                 authRepo.UpdateUserAuth(user, user, request.Password);
 
                 return request.UserId;
             }
         }
 
-        public virtual async Task<int> DeleteUser(int id, string appKey)
+        public virtual async Task<int> DeleteUser(int id)
         {
             using (var db = GetConnection())
             {
-                var user = await db.SingleByIdAsync<T>(id);
+                var user = await db.SingleByIdAsync<User>(id);
                 if (user == null)
                 {
                     throw new UserFriendlyException("用户不存在.");
@@ -344,7 +356,7 @@ namespace MyApp.Manage
 
                 //TODO: 判断其它情况不能删除用户.
 
-                await db.DeleteByIdAsync<T>(id);
+                await db.DeleteByIdAsync<User>(id);
 
                 return id;
             }
@@ -506,7 +518,7 @@ namespace MyApp.Manage
             }
         }
 
-        public async Task<long> DeleteRoleGroup(long id, string appKey)
+        public async Task<long> DeleteRoleGroup(long id)
         {
             using (var db = GetConnection())
             {
@@ -613,7 +625,7 @@ namespace MyApp.Manage
             }
         }
 
-        public async Task<RoleResDto> GetRoleById(long id, string appKey)
+        public async Task<RoleResDto> GetRoleById(long id)
         {
             using (var db = GetConnection())
             {
@@ -734,7 +746,7 @@ namespace MyApp.Manage
             }
         }
 
-        public async Task<long> DeleteRole(long id, string appKey)
+        public async Task<long> DeleteRole(long id)
         {
             using (var db = GetConnection())
             {
@@ -964,7 +976,7 @@ namespace MyApp.Manage
             }
         }
 
-        public async Task<long> DeletePermissionGroup(long id, string appKey)
+        public async Task<long> DeletePermissionGroup(long id)
         {
             using (var db = GetConnection())
             {
@@ -1078,7 +1090,7 @@ namespace MyApp.Manage
             }
         }
 
-        public async Task<PermissionResDto> GetPermissionById(long id, string appKey)
+        public async Task<PermissionResDto> GetPermissionById(long id)
         {
             using (var db = GetConnection())
             {
@@ -1197,7 +1209,7 @@ namespace MyApp.Manage
             }
         }
 
-        public async Task<long> DeletePermission(long id, string appKey)
+        public async Task<long> DeletePermission(long id)
         {
             using (var db = GetConnection())
             {
@@ -1229,7 +1241,7 @@ namespace MyApp.Manage
             }
         }
 
-        public async Task<DistrictResDto> GetDistrictById(int id, string appKey)
+        public async Task<DistrictResDto> GetDistrictById(int id)
         {
             using (var db = GetConnection())
             {
@@ -1243,7 +1255,7 @@ namespace MyApp.Manage
             }
         }
 
-        public async Task<DistrictResDto> GetDistrictByCode(string code, string appKey)
+        public async Task<DistrictResDto> GetDistrictByCode(string code)
         {
             using (var db = GetConnection())
             {
@@ -1315,7 +1327,7 @@ namespace MyApp.Manage
             }
         }
 
-        public async Task<int> DeleteDistrict(int id, string appKey)
+        public async Task<int> DeleteDistrict(int id)
         {
             using (var db = GetConnection())
             {
